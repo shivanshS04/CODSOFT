@@ -31,9 +31,9 @@ export function ProfileBtn() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuLabel>{user}</DropdownMenuLabel>
+                <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleGithub}>
+                <DropdownMenuItem onClick={handleGithub}>   
                     <Github className="mr-2 h-4 w-4" />
                     <span>GitHub</span>
                 </DropdownMenuItem>

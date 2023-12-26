@@ -1,5 +1,5 @@
 "use client"
-import { login } from "@/appwrite"
+import { createUser } from "@/appwrite"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -26,7 +26,7 @@ export default function Login() {
     const handleLogin = (formData) => {
         const email = formData.get("email")
         const password = formData.get("password")
-        if (login(email, password)) {
+        if (createUser(email, password)) {
             setUser({ email });
             redirect('/')
         } else {
@@ -40,7 +40,7 @@ export default function Login() {
     }
     return (
         <div className="flex flex-col gap-3 justify-center items-center h-screen w-screen">
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl" >Login</h1>
+            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl" >Sign Up</h1>
             <form action={handleLogin} className="sm:w-4/5 lg:w-1/3 flex flex-col justify-center items-center">
                 <div className="grid w-full max-w-sm items-center gap-2 mb-5">
                     <Label htmlFor="email">Email</Label>
@@ -52,7 +52,7 @@ export default function Login() {
                 </div>
                 <Button type="submit" >Submit</Button>
             </form>
-            <p className="leading-7 text-zinc-300 [&:not(:first-child)]:mt-6">Don't have an Account ? <Link href='/signup' className="font-semibold underline text-zinc-200">SignUp Here</Link> !</p>
+            <p className="leading-7 text-zinc-300 [&:not(:first-child)]:mt-6">Already have an Account ? <Link href='/login' className="font-semibold underline text-zinc-200">Login Here</Link> !</p>
             <Toaster />
         </div>
     )

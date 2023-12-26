@@ -7,22 +7,15 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function LoginBtn() {
+    const router = useRouter();
     const handleClick = () => {
-        redirect('/login')
+        router.push('/login')
     }
     return (
-        <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <Button variant="secondary" size="icon" onClick={handleClick}><LogIn /></Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <p>Login</p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
+        // <Link href={'/login'}><LogIn /></Link>
+        <Button variant="secondary" size="icon" onClick={handleClick}><LogIn /></Button>
     )
 }
