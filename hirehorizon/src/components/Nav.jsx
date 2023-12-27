@@ -18,7 +18,7 @@ export default function Nav() {
     }, [])
 
     return (
-        <div className="w-screen h-[60px] bg-white/30 flex flex-row items-center justify-between p-2 absolute top-0 left-0 backdrop-blur-md rounded-b-xl">
+        <div className="w-screen h-[60px] bg-white/30 dark:bg-black/30 flex flex-row items-center justify-between p-2 absolute top-0 left-0 backdrop-blur-md rounded-b-xl">
             <Link href="/" className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
                 Hire Horizons
             </Link>
