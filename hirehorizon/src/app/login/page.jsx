@@ -52,7 +52,7 @@ export default function Login() {
                 </div>
                 <Button type="submit" >Submit</Button>
             </form>
-            <p className="leading-7 text-zinc-300 [&:not(:first-child)]:mt-6">Don't have an Account ? <Link href='/signup' className="font-semibold underline text-zinc-200">SignUp Here</Link> !</p>
+            <p className="leading-7 text-zinc-700 dark:text-zinc-300 [&:not(:first-child)]:mt-6">Don't have an Account ? <Link href='/signup' className="font-semibold underline text-zinc-700 dark:text-zinc-200">SignUp Here</Link> !</p>
             <Toaster />
         </div>
     )
