@@ -1,36 +1,18 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Hire Horizon
+Hi! I'm Shivansh Srivastava, This project is part of my 4 weak internship at Codsoft. This is a Job Portal made using NextJS. 
 
-## Getting Started
+## Task : 
+Build a job board website where employers can post job openings and job seekers can search and apply for jobs. Use React, Node.js, and a database like MongoDB or PostgreSQL
 
-First, run the development server:
+## Objectives
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+ - **Home Page** :  Welcome message and featured job listings.
+ - **Job Listings Page**: List of job openings with essential details.
+ - **Job Detail Page**: Detailed information about a specific job.
+ - **Employer Dashboard**: Account management and job posting.
+ - **Candidate Dashboard**: Profile management and job applications.
+ - **Job Application Process**: Application form with resume upload.
+ - **Search Functionality**: Search bar for finding specific jobs.
+ - **Email Notifications**: Notifications for successful applications and updates.
+ - **User Authentication and Security**: Secure user login and data protection.
+ - **Mobile Responsiveness**: Website works well on different devices.
