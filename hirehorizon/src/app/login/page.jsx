@@ -13,7 +13,7 @@ import { useEffect } from "react"
 export default function Login() {
     const user = useAuthStore((state) => state.user);
     const setUser = useAuthStore((state) => state.setUser);
-    const toast = useToast()
+    const { toast } = useToast()
     function checkUser() {
         if (user) {
             redirect('/')
@@ -23,10 +23,12 @@ export default function Login() {
         checkUser()
     }, [])
 
-    const handleLogin = (formData) => {
+    const handleLogin = async (formData) => {
         const email = formData.get("email")
         const password = formData.get("password")
-        if (login(email, password)) {
+
+        const isLoggedIn = await login(email, password)
+        if (isLoggedIn) {
             setUser({ email });
             redirect('/')
         } else {

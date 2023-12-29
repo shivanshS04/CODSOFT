@@ -17,7 +17,7 @@ export default function JobCard({ data }) {
                     <p className="text-zinc-500 font-semibold">{data.company} <span className="ml-5">𖡡 {data.location}</span></p>
                     <p className="leading-7 [&:not(:first-child)]:mt-6 md:w-2/3  " >{data.description.substr(0, descLength)}{descLength == 150 ? <span onClick={showMore} className="text-blue-700 font-semibold">...show more</span> : <span className="text-blue-700 font-semibold" onClick={showLess}>show less</span>}</p>
                 </div>
-                <div className="flex flex-row lg:flex-col justify-between max-sm:items-center w-full lg:w-2/6">
+                <div className="flex flex-row md:flex-col justify-between max-sm:items-center w-full lg:w-2/6">
                     <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">Rs. {data.expected_salary}/year</h3>
                     <Button className='bg-blue-600 dark:bg-amber-500 font-semibold'>Apply</Button>
                 </div>

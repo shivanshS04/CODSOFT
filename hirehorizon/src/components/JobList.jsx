@@ -7,7 +7,8 @@ export default function JobList() {
     const [jobs, setJobs] = useState([])
     const fetchJobs = async () => {
         const fetchedJobs = await getJobs();
-        setJobs(fetchedJobs)
+        if (fetchedJobs)
+            setJobs(fetchedJobs)
     }
     useEffect(() => {
         fetchJobs()

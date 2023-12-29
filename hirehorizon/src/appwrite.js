@@ -51,3 +51,42 @@ export async function getJobs() {
     );
   return promise;
 }
+
+export async function createJob(
+  job_title,
+  company,
+  description,
+  expected_salary,
+  location,
+  owner
+) {
+  const date = new Date();
+  const promise = await databases
+    .createDocument(
+      "658ba04b78b3bf0e2acb",
+      "658ba05e79e6634c2fb5",
+      ID.unique(),
+      {
+        job_title: job_title,
+        expected_salary: expected_salary,
+        owner: owner,
+        applicants: [],
+        description: description,
+        location: location,
+        posted_on: date.toISOString(),
+        company: company,
+      }
+    )
+    .then(
+      (res) => {
+        console.log(res);
+        return true;
+      },
+      (err) => {
+        console.log(err);
+        return false;
+      }
+    );
+
+  return promise;
+}
