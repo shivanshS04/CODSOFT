@@ -3,8 +3,12 @@ import { getJobs } from "@/appwrite"
 import { Suspense, useEffect, useState } from "react"
 import JobCard from "./JobCard"
 import { Skeleton } from "./ui/skeleton"
+import useJobStore from "@/zustand/jobStore"
 export default function JobList() {
-    const [jobs, setJobs] = useState([])
+    // const [loaded, setLoaded] = useState(false)
+    const jobs = useJobStore(state => state.jobs)
+    const refetch = useJobStore(state => state.refetch)
+    const setJobs = useJobStore(state => state.setJobs)
     const fetchJobs = async () => {
         const fetchedJobs = await getJobs();
         if (fetchedJobs)
@@ -12,7 +16,7 @@ export default function JobList() {
     }
     useEffect(() => {
         fetchJobs()
-    }, [])
+    }, [refetch])
     return (
         <div className="flex flex-col items-center">
             {jobs.length == 0 ? <Loading /> :

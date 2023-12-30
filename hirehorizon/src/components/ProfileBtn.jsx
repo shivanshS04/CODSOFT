@@ -1,8 +1,6 @@
 "use client"
 import {
-    Github,
     LogOut,
-    Settings,
     User,
 } from "lucide-react"
 
@@ -16,13 +14,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import useAuthStore from "@/zustand/authStore"
-import { redirect } from "next/navigation"
+import Link from "next/link"
 
 export function ProfileBtn() {
     const removeUser = useAuthStore(state => state.removeUser);
     const user = useAuthStore(state => state.user);
-    const handleGithub = () => {
-        redirect('www.github.com/shivanshs04')
+    const handleProfileClick = () => {
+
     }
     return (
         <DropdownMenu>
@@ -31,11 +29,8 @@ export function ProfileBtn() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleGithub}>   
-                    <Github className="mr-2 h-4 w-4" />
-                    <span>GitHub</span>
+                <DropdownMenuItem onClick={handleProfileClick}>
+                    <Link href="/profile">{user.email}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => removeUser()} >

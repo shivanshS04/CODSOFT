@@ -10,7 +10,7 @@ export default function JobCard({ data }) {
         setDescLength(200)
     }
     return (
-        <div className="bg-blue-50 text-black dark:bg-white/75 p-3 rounded-lg w-5/6 lg:w-2/3 cursor-pointer mb-5 drop-shadow-md">
+        <div suppressHydrationWarning className="bg-blue-50 text-black dark:bg-white/75 p-3 rounded-lg w-5/6 lg:w-2/3 cursor-pointer mb-5 drop-shadow-md">
             <div className="flex flex-col md:flex-row items-start justify-start md:justify-between">
                 <div>
                     <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">{data.job_title}</h3>

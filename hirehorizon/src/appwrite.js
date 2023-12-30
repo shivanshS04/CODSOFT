@@ -80,11 +80,14 @@ export async function createJob(
     .then(
       (res) => {
         console.log(res);
-        return true;
+        return {
+          success: true,
+          res,
+        };
       },
       (err) => {
         console.log(err);
-        return false;
+        return { success: false, err };
       }
     );
 

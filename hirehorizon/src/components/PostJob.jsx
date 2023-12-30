@@ -20,26 +20,30 @@ import { Toaster } from "./ui/toaster"
 import { ToastAction } from "./ui/toast"
 import { createJob } from "@/appwrite"
 import useAuthStore from "@/zustand/authStore"
+import useJobStore from "@/zustand/jobStore"
 
 
 export function PostJob() {
     const [title, setTitle] = useState('')
     const [company, setCompany] = useState('')
-    const [salary, setSalary] = useState(0);
+    const [salary, setSalary] = useState();
     const [description, setDescription] = useState('')
     const location = useFilterStore(state => state.filterState);
     const user = useAuthStore(state => state.user);
     const { toast } = useToast();
     const closeTrigger = useRef()
 
+    const addJob = useJobStore(state => state.addJob)
+
     const handleJobPost = async () => {
-        if (title.length > 0 && company.length > 0 && salary != 0 && description.length > 0 && location != null) {
+        if (title.length > 0 && company.length > 0 && salary && description.length > 0 && location != null) {
             const response = await createJob(title, company, description, salary, location, user.email);
-            if (response) {
+            if (response.success) {
                 toast({
                     title: "job posting successfull!",
                     description: "your job has been successfully added to the portal 🎊"
                 })
+                addJob(response.res)
                 closeTrigger.current.click()
             }
             else {
@@ -62,54 +66,63 @@ export function PostJob() {
     }
 
     return (
-        user &&
         <Drawer>
             <DrawerTrigger asChild>
                 <Button variant="secondary">Post A Job</Button>
             </DrawerTrigger>
             <DrawerContent >
-                <div className="mx-auto w-full max-w-sm">
-                    <DrawerHeader className="flex justify-center items-center">
-                        <DrawerTitle>Add a New Job Opening ✨</DrawerTitle>
-                    </DrawerHeader>
+                {
+                    user ?
+                        <div className="mx-auto w-full max-w-sm">
+                            <DrawerHeader className="flex justify-center items-center">
+                                <DrawerTitle>Add a New Job Opening ✨</DrawerTitle>
+                            </DrawerHeader>
 
-                    <div className="flex flex-col gap-2 items-center">
-                        {/* Job title */}
-                        <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="job_title">Job Title*</Label>
-                            <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} id="job_title" placeholder="Job Title here" />
+                            <div className="flex flex-col gap-2 items-center">
+                                {/* Job title */}
+                                <div className="grid w-full max-w-sm items-center gap-1.5">
+                                    <Label htmlFor="job_title">Job Title*</Label>
+                                    <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} id="job_title" placeholder="Job Title here" />
+                                </div>
+                                {/* company */}
+                                <div className="grid w-full max-w-sm items-center gap-1.5">
+                                    <Label htmlFor="company">Company*</Label>
+                                    <Input type="text" id="company" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company here" />
+                                </div>
+                                {/* expected salary */}
+                                <div className="grid w-full max-w-sm items-center gap-1.5">
+                                    <Label htmlFor="salary">Salary*</Label>
+                                    <Input type="text" id="salary" value={salary} onChange={(e) => setSalary(e.target.value)} placeholder="Approximate of salary here" />
+                                </div>
+                                {/* description */}
+                                <div className="grid w-full max-w-sm items-center gap-1.5">
+                                    <Label htmlFor="job_description">Description*</Label>
+                                    <Textarea id="job_description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Job Description" />
+                                </div>
+                                {/* location */}
+                                <div className="grid w-full max-w-sm items-center gap-1.5">
+                                    <Label htmlFor="select_state">Location*</Label>
+                                    <Selector id='select_state' />
+                                </div>
+
+                            </div>
+
+                            <DrawerFooter>
+                                <Button onClick={handleJobPost}>Post 🚀 </Button>
+                                <DrawerClose ref={closeTrigger} asChild>
+                                    <Button variant="outline">Cancel</Button>
+                                </DrawerClose>
+                            </DrawerFooter>
+                            <Toaster />
                         </div>
-                        {/* company */}
-                        <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="company">Company*</Label>
-                            <Input type="text" id="company" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company here" />
-                        </div>
-                        {/* expected salary */}
-                        <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="salary">Salary*</Label>
-                            <Input type="text" id="salary" value={salary} onChange={(e) => setSalary(e.target.value)} placeholder="Approximate of salary here" />
-                        </div>
-                        {/* description */}
-                        <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="job_description">Description*</Label>
-                            <Textarea id="job_description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Job Description" />
-                        </div>
-                        {/* location */}
-                        <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="select_state">Location*</Label>
-                            <Selector id='select_state' />
+                        :
+                        <div className="mx-auto w-full max-w-sm" >
+                            <DrawerHeader className="flex justify-center items-center">
+                                <DrawerTitle>You must Sign In before Posting a Job 🚫</DrawerTitle>
+                            </DrawerHeader>
                         </div>
 
-                    </div>
-
-                    <DrawerFooter>
-                        <Button onClick={handleJobPost}>Post 🚀 </Button>
-                        <DrawerClose ref={closeTrigger} asChild>
-                            <Button variant="outline">Cancel</Button>
-                        </DrawerClose>
-                    </DrawerFooter>
-                    <Toaster />
-                </div>
+                }
             </DrawerContent>
         </Drawer>
 
