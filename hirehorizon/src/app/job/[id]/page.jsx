@@ -45,7 +45,7 @@ export default function Page() {
 
                             </div>
                             <div className="w-full flex justify-around">
-                                <ApplyBtn className="mt-10 drop-shadow-lg" />
+                                <ApplyBtn className="mt-10 drop-shadow-lg" jobData={jobData} />
                             </div>
                         </>
                 }
