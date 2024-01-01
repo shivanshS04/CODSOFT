@@ -93,3 +93,25 @@ export async function createJob(
 
   return promise;
 }
+
+export async function getJobDetails(job_id) {
+  const promise = await databases
+    .getDocument("658ba04b78b3bf0e2acb", "658ba05e79e6634c2fb5", job_id)
+    .then(
+      (res) => {
+        console.log(res);
+        return {
+          success: true,
+          res,
+        };
+      },
+      (err) => {
+        console.log(err);
+        return {
+          success: false,
+          err,
+        };
+      }
+    );
+  return promise;
+}
