@@ -4,8 +4,12 @@ import { Suspense, useEffect, useState } from "react"
 import JobCard from "./JobCard"
 import { Skeleton } from "./ui/skeleton"
 import useJobStore from "@/zustand/jobStore"
+import useAuthStore from "@/zustand/authStore"
+import useFilterStore from "@/zustand/filterStore"
 export default function JobList() {
     const [isClient, setIsClient] = useState(false)
+    const filterState = useFilterStore(state => state.filterState);
+    const user = useAuthStore(state => state.user);
     const jobs = useJobStore(state => state.jobs)
     const refetch = useJobStore(state => state.refetch)
     const setJobs = useJobStore(state => state.setJobs)
@@ -23,9 +27,12 @@ export default function JobList() {
             {isClient && jobs.length == 0 ? <Loading /> :
                 <div className="w-full flex flex-col items-center">
                     {isClient &&
-                        jobs.map((data, index) => (
-                            <JobCard data={data} key={index} />
-                        ))
+                        jobs
+                            .filter(item => item.owner != user?.email)
+                            .filter((item) => (filterState && item.location == filterState) || !filterState)
+                            .map((data, index) => (
+                                <JobCard data={data} key={index} />
+                            ))
                     }
                 </div>
             }

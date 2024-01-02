@@ -117,7 +117,7 @@ export function PostJob() {
                         </div>
                         :
                         <div className="mx-auto w-full max-w-sm" >
-                            <DrawerHeader className="flex justify-center items-center">
+                            <DrawerHeader className="h-32 flex justify-center items-center">
                                 <DrawerTitle>You must Sign In before Posting a Job 🚫</DrawerTitle>
                             </DrawerHeader>
                         </div>

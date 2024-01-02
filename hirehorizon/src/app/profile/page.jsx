@@ -17,13 +17,13 @@ export default function Profile() {
                         <h2 className="mt-5 text-zinc-700 dark:text-zinc-300 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight transition-colors first:mt-0">
                             {user.email}
                         </h2>
-                        <h3 className="mt-5 text-zinc-700 dark:text-zinc-300 scroll-m-20 pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0">
+                        <h3 className="mt-5 text-zinc-700 dark:text-zinc-300 scroll-m-20 pb-2 text-2xl font-semibold tracking-tight transition-colors first:mt-0">
                             Your Postings
                         </h3>
                         {jobData && jobData.filter(item => item.owner == user.email).map((item, index) => (
-                            <div className="mb-7 border-b flex flex-col ">
+                            <div className="mb-7 flex flex-col ">
                                 <JobCard data={item} key={index} />
-                                <h4 className="scroll-m-20 text-xl font-semibold tracking-tight mb-2">Applicants : {item.applicants.length}</h4>
+                                <h4 className="scroll-m-20 text-lg font-semibold tracking-tight mb-2">Applicants : {item.applicants.length}</h4>
                             </div >
                         ))}
                     </div>

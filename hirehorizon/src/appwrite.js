@@ -117,15 +117,14 @@ export async function getJobDetails(job_id) {
 }
 
 export async function uploadResume(file) {
-  const id = ID.unique();
   const promise = await storage
-    .createFile("6592e689ed7b2df61bc6", id, file)
+    .createFile("6592e689ed7b2df61bc6", ID.unique(), file)
     .then(
       (res) => {
         console.log(res);
         return {
           success: true,
-          id,
+          id: res.$id,
           res,
         };
       },
@@ -180,6 +179,7 @@ export async function addUserRecord(email, name, contact, resumeID) {
         console.log(res);
         return {
           success: true,
+          id: res.$id,
           res,
         };
       },

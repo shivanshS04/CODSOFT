@@ -6,6 +6,11 @@ const useJobStore = create(
     (set) => ({
       jobs: [],
       refetch: false,
+      setRefetch: () => {
+        set((state) => ({
+          refetch: !state.refetch,
+        }));
+      },
       setJobs: (jobList) => {
         set((state) => ({
           jobs: jobList,

@@ -15,9 +15,15 @@ import {
 } from "@/components/ui/dropdown-menu"
 import useAuthStore from "@/zustand/authStore"
 import Link from "next/link"
+import useJobStore from "@/zustand/jobStore"
 
 export function ProfileBtn() {
+    const setRefetch = useJobStore(state => state.setRefetch);
     const removeUser = useAuthStore(state => state.removeUser);
+    const handleLogout = () => {
+        removeUser();
+        setRefetch();
+    }
     const user = useAuthStore(state => state.user);
     const handleProfileClick = () => {
 
@@ -33,7 +39,7 @@ export function ProfileBtn() {
                     <Link href="/profile">{user.email}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => removeUser()} >
+                <DropdownMenuItem onClick={() => handleLogout()} >
                     <LogOut className="mr-2 h-4 w-4 text-red-800 font-semibold " />
                     <span className="text-red-800 font-semibold">Log out</span>
                 </DropdownMenuItem>
