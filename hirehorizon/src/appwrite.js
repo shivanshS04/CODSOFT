@@ -271,3 +271,46 @@ export async function updateApplicants(job_id, applicants, email) {
     );
   return promise;
 }
+
+export async function removeJob(job_id) {
+  const promise = await databases
+    .deleteDocument("658ba04b78b3bf0e2acb", "658ba05e79e6634c2fb5", job_id)
+    .then(
+      (res) => {
+        return true;
+      },
+      (err) => {
+        return false;
+      }
+    );
+  return promise;
+}
+
+export async function removeApplication(job_id, applicants, email) {
+  const index = applicants.indexOf(email);
+  if (index > -1) {
+    applicants.splice(index, 1);
+  }
+  console.log(applicants);
+  const promise = await databases
+    .updateDocument("658ba04b78b3bf0e2acb", "658ba05e79e6634c2fb5", job_id, {
+      applicants: applicants,
+    })
+    .then(
+      (res) => {
+        console.log(res);
+        return {
+          success: true,
+          res,
+        };
+      },
+      (err) => {
+        console.log(err);
+        return {
+          success: false,
+          err,
+        };
+      }
+    );
+  return promise;
+}

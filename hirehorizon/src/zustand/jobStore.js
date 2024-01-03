@@ -22,7 +22,7 @@ const useJobStore = create(
             refetch: !state.refetch,
           }));
         },
-        removeJob: (jobId) => {
+        removeJob: () => {
           set((state) => ({
             refetch: !state.refetch,
           }));
