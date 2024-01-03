@@ -34,7 +34,7 @@ export default function ApplyBtn({ className, jobData }) {
     }, [])
 
     const handleApply = async () => {
-        const res = await updateApplicants(jobData.$id, user.email);
+        const res = await updateApplicants(jobData.$id, jobData.applicants, user.email);
         if (res.success) {
             toast({
                 title: 'Applied Successfully !'
@@ -162,7 +162,17 @@ export default function ApplyBtn({ className, jobData }) {
                             </div>
 
                             <DrawerFooter>
-                                <Button disabled={!docUploaded} onClick={() => handleSubmit()}>Apply 🚀 </Button>
+                                {
+                                    jobData.owner == user.email ?
+
+                                        <Button disabled >You Can't Apply To Your own Posting 🚫</Button>
+                                        :
+
+                                        jobData.applicants.includes(user.email) ?
+                                            <Button disabled >You Have already Applied 🚫</Button>
+                                            :
+                                            <Button disabled={!docUploaded} onClick={() => handleSubmit()}>Apply 🚀 </Button>
+                                }
                                 <DrawerClose ref={closeTrigger} asChild>
                                     <Button variant="outline">Cancel</Button>
                                 </DrawerClose>

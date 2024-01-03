@@ -246,10 +246,12 @@ export async function getUserRecord(
   return checkUser;
 }
 
-export async function updateApplicants(job_id, email) {
+export async function updateApplicants(job_id, applicants, email) {
+  applicants.push(email);
+  console.log(applicants);
   const promise = await databases
     .updateDocument("658ba04b78b3bf0e2acb", "658ba05e79e6634c2fb5", job_id, {
-      applicants: [email],
+      applicants: applicants,
     })
     .then(
       (res) => {
