@@ -1,4 +1,4 @@
-import { Account, Client, ID, Databases, Storage } from "appwrite";
+import { Account, Client, ID, Databases, Storage, Query } from "appwrite";
 const client = new Client();
 const account = new Account(client);
 const storage = new Storage(client);
@@ -19,12 +19,37 @@ export async function createUser(email, password) {
   );
   return promise;
 }
+const databases = new Databases(client);
 
 export async function login(email, password) {
   const promise = await account.createEmailSession(email, password).then(
-    (res) => {
+    async (res) => {
       console.log(res);
-      return true;
+      const userObj = await databases
+        .listDocuments("658ba04b78b3bf0e2acb", "6592e76772dc7d2cbb3c", [
+          Query.equal("email", [email]),
+        ])
+        .then((res) => {
+          if (res.total != 0) {
+            console.log(res.documents[0]);
+            return {
+              email: res.documents[0].email,
+              name: res.documents[0].name,
+              id: res.documents[0].$id,
+              resumeId: res.documents[0].resumeID,
+              contact: res.documents[0].contact,
+              resume: res.documents[0].resume_name,
+            };
+          } else {
+            return {
+              email: email,
+            };
+          }
+        });
+      return {
+        success: true,
+        user: userObj,
+      };
     },
     (err) => {
       console.log(err);
@@ -33,8 +58,6 @@ export async function login(email, password) {
   );
   return promise;
 }
-
-const databases = new Databases(client);
 
 export async function getJobs() {
   const promise = await databases
@@ -117,6 +140,7 @@ export async function getJobDetails(job_id) {
 }
 
 export async function uploadResume(file) {
+  console.log(file);
   const promise = await storage
     .createFile("6592e689ed7b2df61bc6", ID.unique(), file)
     .then(
@@ -125,6 +149,7 @@ export async function uploadResume(file) {
         return {
           success: true,
           id: res.$id,
+          name: file.name,
           res,
         };
       },
@@ -139,49 +164,75 @@ export async function uploadResume(file) {
   return promise;
 }
 
-export async function updateResume(resumeId, file) {
-  const promise = await storage
-    .updateFile("6592e689ed7b2df61bc6", resumeId, file)
-    .then(
-      (res) => {
-        console.log(res);
-        return {
-          success: true,
-          res,
-        };
-      },
-      (err) => {
-        console.log(err);
-        return {
-          success: false,
-          err,
-        };
-      }
-    );
+export async function deleteResume(fileId) {
+  const promise = await storage.deleteFile("6592e689ed7b2df61bc6", fileId).then(
+    (res) => {
+      console.log(res);
+      return {
+        success: true,
+      };
+    },
+    (err) => {
+      console.log(err);
+      return {
+        success: false,
+      };
+    }
+  );
   return promise;
 }
 
-export async function addUserRecord(email, name, contact, resumeID) {
-  const promise = await databases
-    .createDocument(
-      "658ba04b78b3bf0e2acb",
-      "6592e76772dc7d2cbb3c",
-      ID.unique(),
-      {
-        email: email,
-        name: name,
-        contact: contact,
-        resumeID,
-      }
-    )
+export async function getUserRecord(
+  email,
+  name,
+  contact,
+  resumeID,
+  resume_name
+) {
+  const checkUser = await databases
+    .listDocuments("658ba04b78b3bf0e2acb", "6592e76772dc7d2cbb3c", [
+      Query.equal("email", [email]),
+    ])
     .then(
       (res) => {
-        console.log(res);
-        return {
-          success: true,
-          id: res.$id,
-          res,
-        };
+        if (res.total == 0) {
+          return databases
+            .createDocument(
+              "658ba04b78b3bf0e2acb",
+              "6592e76772dc7d2cbb3c",
+              ID.unique(),
+              {
+                email: email,
+                name: name,
+                contact: contact,
+                resumeID,
+                resume_name,
+              }
+            )
+            .then(
+              (res) => {
+                console.log(res);
+                return {
+                  success: true,
+                  id: res.$id,
+                  res,
+                };
+              },
+              (err) => {
+                console.log(err);
+                return {
+                  success: false,
+                  err,
+                };
+              }
+            );
+        } else {
+          return {
+            success: true,
+            id: res.documents[0].$id,
+            res: res.documents[0],
+          };
+        }
       },
       (err) => {
         console.log(err);
@@ -192,7 +243,7 @@ export async function addUserRecord(email, name, contact, resumeID) {
       }
     );
 
-  return promise;
+  return checkUser;
 }
 
 export async function updateApplicants(job_id, email) {

@@ -11,11 +11,12 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useToast } from "./ui/use-toast"
 import { Toaster } from "./ui/toaster"
 import useAuthStore from "@/zustand/authStore"
-import { addUserRecord, updateApplicants, updateResume, uploadResume } from "@/appwrite"
+import { deleteResume, getUserRecord, updateApplicants, updateResume, uploadResume } from "@/appwrite"
+import { Trash2 } from "lucide-react"
 
 
 export default function ApplyBtn({ className, jobData }) {
@@ -23,6 +24,14 @@ export default function ApplyBtn({ className, jobData }) {
     const { toast } = useToast();
     const user = useAuthStore(state => state.user);
     const setUser = useAuthStore(state => state.setUser)
+    const [docUploaded, setDocUploaded] = useState(false);
+
+    useEffect(() => {
+        if (user)
+            if (user.resumeId) {
+                setDocUploaded(true)
+            }
+    }, [])
 
     const handleApply = async () => {
         const res = await updateApplicants(jobData.$id, user.email);
@@ -41,17 +50,33 @@ export default function ApplyBtn({ className, jobData }) {
     }
 
     const handleResumeUpdate = async (file) => {
-        if (!user.resumeId) {
-            const resumeUpload = await uploadResume(file);
-            if (resumeUpload.success) {
-                setUser({ ...user, resumeId: resumeUpload.id, resume: resumeUpload.res.name })
-            }
+        setDocUploaded(false)
+        const resumeUpload = await uploadResume(file);
+        if (resumeUpload.success) {
+            setUser({ ...user, resumeId: resumeUpload.id, resume: resumeUpload.name })
+            setDocUploaded(true)
         }
         else {
-            const resumeUpdate = await updateResume(user.resumeId, file);
-            if (resumeUpdate.success) {
-                setUser({ ...user, resume: resumeUpdate.res.name })
-            }
+            toast({
+                title: 'Some Error Occured !',
+                variant: 'destructive'
+            })
+        }
+    }
+
+    const handleResumeDelete = async () => {
+        setDocUploaded(false);
+        const isResumeDeleted = await deleteResume(user.resumeId);
+        if (isResumeDeleted.success) {
+            setUser({
+                ...user, resume: null, resumeId: null
+            })
+        }
+        else {
+            toast({
+                title: 'Error Deleting the file',
+                variant: 'destructive'
+            })
         }
     }
 
@@ -60,7 +85,7 @@ export default function ApplyBtn({ className, jobData }) {
             return alert('please provide neccessary information!')
         }
         if (!user.id) {
-            const userRecord = await addUserRecord(user.email, user.name, user.contact, user.resumeId);
+            const userRecord = await getUserRecord(user.email, user.name, user.contact, user.resumeId, user.resume);
             if (userRecord.success) {
                 setUser({
                     ...user,
@@ -121,18 +146,23 @@ export default function ApplyBtn({ className, jobData }) {
                                 </div>
                                 <div className="grid w-full max-w-sm items-center gap-1.5">
                                     <Label htmlFor="resume">Resume</Label>
-                                    {user.resumeId && <p>{user.resume}</p>}
-                                    <Input
-                                        type="file"
-                                        id="resume"
-                                        accept=".doc , .docx, .pdf"
-                                        onChange={(e) => handleResumeUpdate(e.target.files[0])}
-                                    />
+                                    {user.resumeId ?
+                                        <div className="flex flex-row justify-between items-center border-zinc-200 border-2 rounded-lg p-3">
+                                            <p className="font-medium ">{user.resume}</p>
+                                            <Button variant="destructive" size='icon' onClick={() => handleResumeDelete()} ><Trash2 /></Button>
+                                        </div>
+                                        :
+                                        <Input
+                                            type="file"
+                                            id="resume"
+                                            accept=".doc , .docx, .pdf"
+                                            onChange={(e) => handleResumeUpdate(e.target.files[0])}
+                                        />}
                                 </div>
                             </div>
 
                             <DrawerFooter>
-                                <Button onClick={() => handleSubmit()}>Apply 🚀 </Button>
+                                <Button disabled={!docUploaded} onClick={() => handleSubmit()}>Apply 🚀 </Button>
                                 <DrawerClose ref={closeTrigger} asChild>
                                     <Button variant="outline">Cancel</Button>
                                 </DrawerClose>

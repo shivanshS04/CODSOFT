@@ -28,8 +28,9 @@ export default function Login() {
         const password = formData.get("password")
 
         const isLoggedIn = await login(email, password)
-        if (isLoggedIn) {
-            setUser({ email });
+        if (isLoggedIn.success) {
+            console.log(isLoggedIn.user)
+            setUser(isLoggedIn.user);
             redirect('/')
         } else {
             toast({

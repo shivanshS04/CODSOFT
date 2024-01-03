@@ -23,10 +23,11 @@ export default function Login() {
         checkUser()
     }, [])
 
-    const handleLogin = (formData) => {
+    const handleLogin = async (formData) => {
         const email = formData.get("email")
         const password = formData.get("password")
-        if (createUser(email, password)) {
+        const isSignedUp = await createUser(email, password);
+        if (isSignedUp) {
             setUser({ email });
             redirect('/')
         } else {

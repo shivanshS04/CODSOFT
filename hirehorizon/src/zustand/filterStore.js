@@ -5,10 +5,16 @@ const useFilterStore = create(
   devtools(
     persist(
       (set) => ({
+        filterTitle: "",
         filterState: null,
         setFilterState: (selectedState) => {
           set((state) => ({
             filterState: selectedState,
+          }));
+        },
+        setFilterTitle: (search) => {
+          set((state) => ({
+            filterTitle: search,
           }));
         },
       }),

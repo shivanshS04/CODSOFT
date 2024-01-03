@@ -21,7 +21,7 @@ export default function Profile() {
                             Your Postings
                         </h3>
                         {jobData && jobData.filter(item => item.owner == user.email).map((item, index) => (
-                            <div className="mb-7 flex flex-col ">
+                            <div className="mb-7 flex flex-col w-full items-center md:items-start ">
                                 <JobCard data={item} key={index} />
                                 <h4 className="scroll-m-20 text-lg font-semibold tracking-tight mb-2">Applicants : {item.applicants.length}</h4>
                             </div >
