@@ -9,7 +9,6 @@ client
 export async function createUser(email, password) {
   const promise = await account.create(ID.unique(), email, password).then(
     (res) => {
-      console.log(res);
       return true;
     },
     (err) => {
@@ -24,14 +23,12 @@ const databases = new Databases(client);
 export async function login(email, password) {
   const promise = await account.createEmailSession(email, password).then(
     async (res) => {
-      console.log(res);
       const userObj = await databases
         .listDocuments("658ba04b78b3bf0e2acb", "6592e76772dc7d2cbb3c", [
           Query.equal("email", [email]),
         ])
         .then((res) => {
           if (res.total != 0) {
-            console.log(res.documents[0]);
             return {
               email: res.documents[0].email,
               name: res.documents[0].name,
@@ -64,7 +61,6 @@ export async function getJobs() {
     .listDocuments("658ba04b78b3bf0e2acb", "658ba05e79e6634c2fb5")
     .then(
       (res) => {
-        console.log(res.documents);
         return res.documents;
       },
       (err) => {
@@ -102,7 +98,6 @@ export async function createJob(
     )
     .then(
       (res) => {
-        console.log(res);
         return {
           success: true,
           res,
@@ -122,7 +117,6 @@ export async function getJobDetails(job_id) {
     .getDocument("658ba04b78b3bf0e2acb", "658ba05e79e6634c2fb5", job_id)
     .then(
       (res) => {
-        console.log(res);
         return {
           success: true,
           res,
@@ -140,12 +134,10 @@ export async function getJobDetails(job_id) {
 }
 
 export async function uploadResume(file) {
-  console.log(file);
   const promise = await storage
     .createFile("6592e689ed7b2df61bc6", ID.unique(), file)
     .then(
       (res) => {
-        console.log(res);
         return {
           success: true,
           id: res.$id,
@@ -167,7 +159,6 @@ export async function uploadResume(file) {
 export async function deleteResume(fileId) {
   const promise = await storage.deleteFile("6592e689ed7b2df61bc6", fileId).then(
     (res) => {
-      console.log(res);
       return {
         success: true,
       };
@@ -211,7 +202,6 @@ export async function getUserRecord(
             )
             .then(
               (res) => {
-                console.log(res);
                 return {
                   success: true,
                   id: res.$id,
@@ -248,14 +238,12 @@ export async function getUserRecord(
 
 export async function updateApplicants(job_id, applicants, email) {
   applicants.push(email);
-  console.log(applicants);
   const promise = await databases
     .updateDocument("658ba04b78b3bf0e2acb", "658ba05e79e6634c2fb5", job_id, {
       applicants: applicants,
     })
     .then(
       (res) => {
-        console.log(res);
         return {
           success: true,
           res,
@@ -291,14 +279,12 @@ export async function removeApplication(job_id, applicants, email) {
   if (index > -1) {
     applicants.splice(index, 1);
   }
-  console.log(applicants);
   const promise = await databases
     .updateDocument("658ba04b78b3bf0e2acb", "658ba05e79e6634c2fb5", job_id, {
       applicants: applicants,
     })
     .then(
       (res) => {
-        console.log(res);
         return {
           success: true,
           res,

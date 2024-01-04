@@ -15,13 +15,11 @@ import Selector from "./Selector"
 import { Textarea } from "./ui/textarea"
 import { useRef, useState } from "react"
 import useFilterStore from "@/zustand/filterStore"
-import { useToast } from "./ui/use-toast"
-import { Toaster } from "./ui/toaster"
-import { ToastAction } from "./ui/toast"
 import { createJob } from "@/appwrite"
 import useAuthStore from "@/zustand/authStore"
 import useJobStore from "@/zustand/jobStore"
-
+import toast from "react-hot-toast"
+import { Toaster } from "react-hot-toast"
 
 export function PostJob() {
     const [title, setTitle] = useState('')
@@ -30,38 +28,36 @@ export function PostJob() {
     const [description, setDescription] = useState('')
     const location = useFilterStore(state => state.filterState);
     const user = useAuthStore(state => state.user);
-    const { toast } = useToast();
     const closeTrigger = useRef()
 
     const addJob = useJobStore(state => state.addJob)
 
     const handleJobPost = async () => {
         if (title.length > 0 && company.length > 0 && salary && description.length > 0 && location != null) {
+            var loading = toast.loading(`Loading..`);
             const response = await createJob(title, company, description, salary, location, user.email);
+            toast.dismiss(loading)
+
             if (response.success) {
-                toast({
-                    title: "job posting successfull!",
-                    description: "your job has been successfully added to the portal 🎊"
-                })
+                toast.success("job posting successfull!",
+                    {
+                        duration: 1000
+                    })
                 addJob(response.res)
                 closeTrigger.current.click()
             }
             else {
-                toast({
-                    variant: "destructive",
-                    title: "Uh oh! Something went wrong.",
-                    description: "There was a problem with your request.",
-                    action: <ToastAction altText="Try again">Try again</ToastAction>,
-                })
+                toast.error("Uh oh! Something went wrong.",
+                    {
+                        duration: 1000
+                    })
             }
         }
         else {
-            toast({
-                variant: "destructive",
-                title: "Some feilds are still empty",
-                description: "Please provide all necessary details about your posting",
-                action: <ToastAction altText="Try again">Try again</ToastAction>,
-            })
+            toast.error("Uh oh! Something went wrong.",
+                {
+                    duration: 1000
+                })
         }
     }
 
@@ -82,22 +78,22 @@ export function PostJob() {
                                 {/* Job title */}
                                 <div className="grid w-full max-w-sm items-center gap-1.5">
                                     <Label htmlFor="job_title">Job Title*</Label>
-                                    <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} id="job_title" placeholder="Job Title here" />
+                                    <Input type="text" onChange={(e) => setTitle(e.target.value)} id="job_title" placeholder="Job Title here" />
                                 </div>
                                 {/* company */}
                                 <div className="grid w-full max-w-sm items-center gap-1.5">
                                     <Label htmlFor="company">Company*</Label>
-                                    <Input type="text" id="company" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company here" />
+                                    <Input type="text" id="company" onChange={(e) => setCompany(e.target.value)} placeholder="Company here" />
                                 </div>
                                 {/* expected salary */}
                                 <div className="grid w-full max-w-sm items-center gap-1.5">
                                     <Label htmlFor="salary">Salary*</Label>
-                                    <Input type="text" id="salary" value={salary} onChange={(e) => setSalary(e.target.value)} placeholder="Approximate of salary here" />
+                                    <Input type="text" id="salary" onChange={(e) => setSalary(e.target.value)} placeholder="Approximate of salary here" />
                                 </div>
                                 {/* description */}
                                 <div className="grid w-full max-w-sm items-center gap-1.5">
                                     <Label htmlFor="job_description">Description*</Label>
-                                    <Textarea id="job_description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Job Description" />
+                                    <Textarea id="job_description" onChange={(e) => setDescription(e.target.value)} placeholder="Job Description" />
                                 </div>
                                 {/* location */}
                                 <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -113,7 +109,6 @@ export function PostJob() {
                                     <Button variant="outline">Cancel</Button>
                                 </DrawerClose>
                             </DrawerFooter>
-                            <Toaster />
                         </div>
                         :
                         <div className="mx-auto w-full max-w-sm" >
@@ -123,6 +118,7 @@ export function PostJob() {
                         </div>
 
                 }
+                <Toaster />
             </DrawerContent>
         </Drawer>
 

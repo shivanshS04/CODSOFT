@@ -37,7 +37,7 @@ export default function Page() {
                                 <h3 className="scroll-m-20 text-lg font-bold tracking-tight lg:text-xl">Highlights :</h3>
                                 <p className="text-zinc-500 font-semibold">Company : {jobData.company}</p>
                                 <p className="text-zinc-500 font-semibold">Expected Salary : Rs.{jobData.expected_salary}/- per annum</p>
-                                {/* <p className="text-zinc-500 font-semibold">Applicants : {jobData.applicants.length}</p> */}
+                                <p className="text-zinc-500 font-semibold">Applicants : {jobData.applicants.length}</p>
                             </div>
                             <div className="mt-6">
                                 <h3 className="scroll-m-20 text-lg font-bold tracking-tight lg:text-xl">Description :</h3>

@@ -8,8 +8,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
     Tabs,
     TabsContent,
@@ -21,15 +19,17 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./
 import useAuthStore from "@/zustand/authStore"
 import { Trash2, X } from "lucide-react"
 import { getJobs, removeApplication, removeJob } from "@/appwrite"
-import { toast } from "./ui/use-toast"
-import { Toaster } from "./ui/toaster"
+import toast, { Toaster } from "react-hot-toast"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+
 
 export default function ProfileTab() {
     const jobs = useJobStore(state => state.jobs);
     const user = useAuthStore(state => state.user)
     const removeJobState = useJobStore(state => state.removeJob)
     const setJobs = useJobStore(state => state.setJobs)
-
+    const router = useRouter()
     const fetchJobs = async () => {
         const fetchedJobs = await getJobs();
         if (fetchedJobs)
@@ -37,22 +37,30 @@ export default function ProfileTab() {
     }
 
     const handleRemoveJobPosting = async (job_id) => {
+        var loading = toast.loading(`Loading..`);
         const removedJob = await removeJob(job_id);
+        toast.dismiss(loading)
         if (removedJob) {
-
+            toast.success('Removed Job Posting!', {
+                duration: 1000
+            })
+            removeJobState()
             fetchJobs()
         }
         else {
-            toast({
-                title: 'An error occured !',
-                variant: 'destructive'
-            })
+            toast.error("Uh oh! Something went wrong.",
+                {
+                    duration: 1000
+                })
         }
     }
 
     const handleRemoveApplication = async (job_id, applicants) => {
+        var loading = toast.loading(`Loading..`);
         const isApplicationRemoved = await removeApplication(job_id, applicants, user.email);
+        toast.dismiss(loading);
         if (isApplicationRemoved.success) {
+            removeJobState()
             fetchJobs();
         }
     }
@@ -82,8 +90,8 @@ export default function ProfileTab() {
                                                         <Button variant='destructive' onClick={() => handleRemoveJobPosting(item.$id)} size='icon'><Trash2 /></Button>
                                                     </div>
                                                 </AccordionTrigger>
-                                                <AccordionContent>
-                                                    Applicants: {item.applicants.length}
+                                                <AccordionContent className='bg-zinc-700 rounded-lg p-2 mb-3 cursor-pointer'>
+                                                    <Link href={`/applicants/${item.$id}`}>Applicants: {item.applicants.length}</Link>
                                                 </AccordionContent>
                                             </AccordionItem>
                                         ))
@@ -117,7 +125,7 @@ export default function ProfileTab() {
                                 </div>
 
                             }
-
+                            <Toaster />
                         </div>
                     </CardContent>
 

@@ -12,20 +12,19 @@ import {
     DrawerTrigger,
 } from "@/components/ui/drawer"
 import { useEffect, useRef, useState } from "react"
-import { useToast } from "./ui/use-toast"
-import { Toaster } from "./ui/toaster"
 import useAuthStore from "@/zustand/authStore"
 import { deleteResume, getUserRecord, updateApplicants, updateResume, uploadResume } from "@/appwrite"
 import { Trash2 } from "lucide-react"
+import toast, { Toaster } from "react-hot-toast"
+import useJobStore from "@/zustand/jobStore"
 
 
 export default function ApplyBtn({ className, jobData }) {
     const closeTrigger = useRef()
-    const { toast } = useToast();
     const user = useAuthStore(state => state.user);
     const setUser = useAuthStore(state => state.setUser)
     const [docUploaded, setDocUploaded] = useState(false);
-
+    const refresh = useJobStore(state => state.removeJob);
     useEffect(() => {
         if (user)
             if (user.resumeId) {
@@ -34,49 +33,60 @@ export default function ApplyBtn({ className, jobData }) {
     }, [])
 
     const handleApply = async () => {
+        var loading = toast.loading(`Loading..`);
         const res = await updateApplicants(jobData.$id, jobData.applicants, user.email);
+        toast.dismiss(loading)
         if (res.success) {
-            toast({
-                title: 'Applied Successfully !'
+            refresh()
+            toast.success('Applied Successfully !', {
+                duration: 1000
             })
             closeTrigger.current.click()
         }
         else {
-            toast({
-                title: 'Some Error Occured !',
-                variant: 'destructive'
-            })
+            toast.error('Some Error Occured !',
+                {
+                    duration: 1000
+                })
         }
     }
 
     const handleResumeUpdate = async (file) => {
         setDocUploaded(false)
+        var loading = toast.loading(`Uploading Resume..`);
         const resumeUpload = await uploadResume(file);
+        toast.dismiss(loading);
         if (resumeUpload.success) {
+            toast.success('Upload Successful !', {
+                duration: 1000
+            })
             setUser({ ...user, resumeId: resumeUpload.id, resume: resumeUpload.name })
             setDocUploaded(true)
         }
         else {
-            toast({
-                title: 'Some Error Occured !',
-                variant: 'destructive'
-            })
+            toast.error("Uh oh! Something went wrong.",
+                {
+                    duration: 1000
+                })
         }
     }
 
     const handleResumeDelete = async () => {
         setDocUploaded(false);
+        var loading = toast.loading(`Deleting..`);
         const isResumeDeleted = await deleteResume(user.resumeId);
+        toast.dismiss(loading);
         if (isResumeDeleted.success) {
+            toast.success('Resume Deleted Successfully', { duration: 1000 })
             setUser({
                 ...user, resume: null, resumeId: null
             })
         }
         else {
-            toast({
-                title: 'Error Deleting the file',
-                variant: 'destructive'
-            })
+            toast.error('Error Deleting the file',
+                {
+                    duration: 1000
+                })
         }
     }
 
@@ -177,7 +187,7 @@ export default function ApplyBtn({ className, jobData }) {
                                     <Button variant="outline">Cancel</Button>
                                 </DrawerClose>
                             </DrawerFooter>
-                            <Toaster />
+
                         </div>
                         :
                         <div className="mx-auto w-full max-w-sm" >
@@ -187,6 +197,7 @@ export default function ApplyBtn({ className, jobData }) {
                         </div>
 
                 }
+                <Toaster />
             </DrawerContent>
         </Drawer>
 

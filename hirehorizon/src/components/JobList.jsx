@@ -27,7 +27,7 @@ export default function JobList() {
         <div className="flex flex-col items-center">
             {isClient && jobs.length == 0 ? <Loading /> :
                 <div className="w-full flex flex-col items-center">
-                    {isClient && 
+                    {isClient &&
                         jobs
                             .filter((item) => item.owner != user?.email)
                             .filter((item) => item.job_title.toLowerCase().includes(filterTitle))

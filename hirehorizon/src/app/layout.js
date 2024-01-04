@@ -6,10 +6,9 @@ import { ThemeProvider as NextThemeProvider } from "next-themes";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
-  
   return (
     <html lang="en">
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={inter.className}>
         <NextThemeProvider
           attribute="class"
           defaultTheme="system"

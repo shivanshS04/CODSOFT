@@ -3,17 +3,15 @@ import { createUser } from "@/appwrite"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Toaster } from "@/components/ui/toaster"
-import { useToast } from "@/components/ui/use-toast"
 import useAuthStore from "@/zustand/authStore"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { useEffect } from "react"
+import toast, { Toaster } from "react-hot-toast"
 
 export default function Login() {
     const user = useAuthStore((state) => state.user);
     const setUser = useAuthStore((state) => state.setUser);
-    const toast = useToast()
     function checkUser() {
         if (user) {
             redirect('/')
@@ -26,14 +24,18 @@ export default function Login() {
     const handleLogin = async (formData) => {
         const email = formData.get("email")
         const password = formData.get("password")
+        var loading = toast.loading(`Loading..`);
         const isSignedUp = await createUser(email, password);
+        toast.dismiss(loading)
         if (isSignedUp) {
+            toast.success('Created Account Successfully !', {
+                duration: 1000
+            })
             setUser({ email });
             redirect('/')
         } else {
-            toast({
-                title: "Try Again !",
-                description: "Invalid Credentials",
+            toast.error('Try Again!', {
+                duration: 1000
             })
             formData.set("email", "");
             formData.set("password", "");
