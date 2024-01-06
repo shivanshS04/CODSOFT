@@ -126,7 +126,7 @@ export default function ApplyBtn({ className, jobData }) {
                     user ?
                         <div className="mx-auto w-full max-w-sm">
                             <DrawerHeader className="flex justify-center items-center">
-                                <DrawerTitle>Add a New Job Opening ✨</DrawerTitle>
+                                <DrawerTitle>Apply for a Job ✨</DrawerTitle>
                             </DrawerHeader>
 
 
