@@ -13,10 +13,7 @@ export default function Nav() {
     const user = useAuthStore((state) => state.user)
     const [loaded, setLoaded] = useState(false);
     useEffect(() => {
-
-        return () => {
-            setLoaded(true)
-        }
+        setLoaded(true)
     }, [])
 
     return (
