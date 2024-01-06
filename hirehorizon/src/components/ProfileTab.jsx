@@ -90,7 +90,7 @@ export default function ProfileTab() {
                                                         <Button variant='destructive' onClick={() => handleRemoveJobPosting(item.$id)} size='icon'><Trash2 /></Button>
                                                     </div>
                                                 </AccordionTrigger>
-                                                <AccordionContent className='bg-zinc-700 rounded-lg p-2 mb-3 cursor-pointer'>
+                                                <AccordionContent className='bg-zinc-100 dark:bg-zinc-700 font-medium rounded-lg p-2 mb-3 cursor-pointer'>
                                                     <Link href={`/applicants/${item.$id}`}>Applicants: {item.applicants.length}</Link>
                                                 </AccordionContent>
                                             </AccordionItem>

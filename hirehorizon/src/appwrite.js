@@ -300,3 +300,8 @@ export async function removeApplication(job_id, applicants, email) {
     );
   return promise;
 }
+
+export async function getResumeURL(resumeId) {
+  const promise = storage.getFileView("6592e689ed7b2df61bc6", resumeId);
+  return promise.href;
+}
