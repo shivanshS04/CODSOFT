@@ -30,7 +30,7 @@ export default function JobList() {
                     {isClient &&
                         jobs
                             .filter((item) => item.owner != user?.email)
-                            .filter((item) => item.job_title.toLowerCase().includes(filterTitle))
+                            .filter((item) => item.job_title.toLowerCase().includes(filterTitle.toLowerCase()))
                             .filter((item) => (filterState && item.location == filterState) || !filterState)
                             .map((data, index) => (
                                 <JobCard data={data} key={index} />
