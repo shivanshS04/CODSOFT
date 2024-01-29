@@ -192,7 +192,7 @@ export default function ApplyBtn({ className, jobData }) {
                         :
                         <div className="mx-auto w-full max-w-sm" >
                             <DrawerHeader className="h-32 flex justify-center items-center">
-                                <DrawerTitle>You must Sign In before Posting a Job 🚫</DrawerTitle>
+                                <DrawerTitle>You must Sign In before applying for a Job 🚫</DrawerTitle>
                             </DrawerHeader>
                         </div>
 
